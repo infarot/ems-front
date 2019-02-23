@@ -12,6 +12,7 @@ const {RangePicker} = DatePicker;
 
 
 class Seamstress extends Component {
+    _isMounted = false;
 
     constructor(props) {
         super(props);
@@ -93,18 +94,22 @@ class Seamstress extends Component {
         if (this.state.fromDate.length > 1 && this.state.toDate.length > 1) {
             getSeamstressListFromDateRange(this.state.fromDate, this.state.toDate)
                 .then(response => {
-                    this.setState({
-                        seamstress: response,
-                        isLoading: false
-                    })
+                    if (this._isMounted) {
+                        this.setState({
+                            seamstress: response,
+                            isLoading: false
+                        })
+                    }
                 });
         } else {
             getSeamstressList()
                 .then(response => {
-                    this.setState({
-                        seamstress: response,
-                        isLoading: false
-                    })
+                    if (this._isMounted) {
+                        this.setState({
+                            seamstress: response,
+                            isLoading: false
+                        })
+                    }
                 }).catch(error => {
                 if (error.status === 401) {
                     notification.error({
@@ -123,7 +128,12 @@ class Seamstress extends Component {
 
 
     componentDidMount() {
+        this._isMounted = true;
         this.getSeamstresses();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     onChange = (dates, dateStrings) => {
@@ -142,9 +152,9 @@ class Seamstress extends Component {
 
         const columns = [
             {
-                title: 'Lp',
-                dataIndex: 'lp',
-                key: 'lp',
+                title: 'No.',
+                dataIndex: 'no',
+                key: 'no',
             },
             {
                 title: 'Id',
@@ -183,7 +193,7 @@ class Seamstress extends Component {
         const dataSource = seamstress.map(seamstress => {
             i++;
             return {
-                lp: i,
+                no: i,
                 name: seamstress.name,
                 lastName: seamstress.lastName,
                 id: seamstress.id,

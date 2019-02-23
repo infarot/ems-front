@@ -5,6 +5,7 @@ import LoadingIndicator from "./Seamstress";
 
 
 class Result extends Component {
+    _isMounted = false;
 
     constructor(props) {
         super(props);
@@ -15,14 +16,17 @@ class Result extends Component {
     }
 
     componentDidMount() {
+        this._isMounted = true;
         const {match: {params}} = this.props;
 
         getSeamstressResults(params.id)
             .then(response => {
-                this.setState({
-                    results: response,
-                    isLoading: false
-                })
+                if (this._isMounted) {
+                    this.setState({
+                        results: response,
+                        isLoading: false
+                    })
+                }
             }).catch(error => {
             if (error.status === 401) {
                 notification.error({
@@ -39,12 +43,13 @@ class Result extends Component {
 
     }
 
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
     render() {
 
         const {results, isLoading} = this.state;
-        /*
-
-        */
 
         if (isLoading) {
             return <LoadingIndicator/>
