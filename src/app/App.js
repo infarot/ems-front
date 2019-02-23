@@ -28,7 +28,7 @@ class App extends Component {
             currentUser: null,
             isAuthenticated: false,
             isLoading: false
-        }
+        };
         this.handleLogout = this.handleLogout.bind(this);
         this.loadCurrentUser = this.loadCurrentUser.bind(this);
         this.handleLogin = this.handleLogin.bind(this);

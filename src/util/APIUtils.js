@@ -39,6 +39,13 @@ export function getSeamstressList() {
     });
 }
 
+export function getSeamstressListFromDateRange(from, to) {
+    return request({
+        url: API_BASE_URL + "/seamstress/"+from+"/"+to,
+        method: 'GET'
+    });
+}
+
 export function getSeamstressResults(id) {
     return request({
         url: API_BASE_URL + "/seamstress/dailyResults/" + id,

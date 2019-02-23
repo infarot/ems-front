@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import {getSeamstressList} from "../util/APIUtils";
+import {getSeamstressList, getSeamstressListFromDateRange} from "../util/APIUtils";
 import "./Seamstress.css"
 import LoadingIndicator from "../common/LoadingIndicator";
 import {Redirect, Link} from "react-router-dom";
 import {
-    Table, Input, Button, Icon, notification
+    Table, Input, Button, Icon, notification, DatePicker
 } from 'antd';
 import Highlighter from 'react-highlight-words';
+
+const {RangePicker} = DatePicker;
 
 
 class Seamstress extends Component {
@@ -18,7 +20,10 @@ class Seamstress extends Component {
             searchText: '',
             ready: false,
             seamstress: [],
-            isLoading: false
+            isLoading: false,
+            fromDate: '',
+            toDate: '',
+            placeholder: ['From', 'To']
         };
     }
 
@@ -31,7 +36,6 @@ class Seamstress extends Component {
                     ref={node => {
                         this.searchInput = node;
                     }}
-                    placeholder={`Search ${dataIndex}`}
                     value={selectedKeys[0]}
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
@@ -87,39 +91,51 @@ class Seamstress extends Component {
         this.setState({
             isLoading: true
         });
-
-        getSeamstressList()
-            .then(response => {
-                this.setState({
-                    seamstress: response,
-                    isLoading: false
-                })
-            }).catch(error => {
-            if (error.status === 401) {
-                notification.error({
-                    message: 'EMS',
-                    description: 'You are not eligible to see this content'
+        if (this.state.fromDate.length > 1 && this.state.toDate.length > 1) {
+            getSeamstressListFromDateRange(this.state.fromDate, this.state.toDate)
+                .then(response => {
+                    this.setState({
+                        seamstress: response,
+                        isLoading: false
+                    })
                 });
-            } else {
-                notification.error({
-                    message: 'EMS',
-                    description: error.message || 'Something went wrong. Please try again'
-                });
-            }
-        });
+        } else {
+            getSeamstressList()
+                .then(response => {
+                    this.setState({
+                        seamstress: response,
+                        isLoading: false
+                    })
+                }).catch(error => {
+                if (error.status === 401) {
+                    notification.error({
+                        message: 'EMS',
+                        description: 'Please login first'
+                    });
+                } else {
+                    notification.error({
+                        message: 'EMS',
+                        description: error.message || 'Something went wrong. Please try again'
+                    });
+                }
+            });
+        }
     }
-
 
 
     componentDidMount() {
         this.getSeamstresses();
     }
 
+    onChange = (dates, dateStrings) => {
+        this.setState({fromDate: dateStrings[0], toDate: dateStrings[1]}, () => {
+            this.getSeamstresses();
+        });
+
+    };
+
     render() {
         const {seamstress, isLoading} = this.state;
-        /*
-
-        */
 
         if (isLoading) {
             return <LoadingIndicator/>
@@ -176,7 +192,8 @@ class Seamstress extends Component {
                 score: seamstress.score,
                 key: seamstress.id,
                 action: <Link to={{
-                    pathname: `/result/${seamstress.id}`,}}>
+                    pathname: `/result/${seamstress.id}`,
+                }}>
                     <Button type="primary" size="small">Results</Button>
                 </Link>
             }
@@ -189,7 +206,32 @@ class Seamstress extends Component {
                     }}/>
             );
         } else {
-            return <Table dataSource={dataSource} columns={columns}/>
+            return (
+                <div>
+                    <br/>
+                    <RangePicker
+                        dateRender={(current) => {
+                            const style = {};
+                            if (current.date() === 1) {
+                                style.border = '1px solid #1890ff';
+                                style.borderRadius = '50%';
+                            }
+                            return (
+                                <div className="ant-calendar-date" style={style}>
+                                    {current.date()}
+                                </div>
+                            );
+                        }}
+                        onChange={this.onChange}
+                        placeholder={this.state.fromDate.length > 1 ? [this.state.fromDate, this.state.toDate] : this.state.placeholder}
+                    />
+                    <Button className="button" type="primary" onClick={() => this.setState({fromDate: '', toDate: ''}, () => {
+                        this.getSeamstresses();
+                    })}>Reset
+                    </Button>
+                    <br/><br/>
+                    <Table dataSource={dataSource} columns={columns}/>
+                </div>)
         }
     }
 }
