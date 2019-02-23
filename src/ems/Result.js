@@ -2,7 +2,9 @@ import React, {Component} from 'react'
 import {getSeamstressResults} from "../util/APIUtils";
 import {notification, Table} from "antd";
 import LoadingIndicator from "./Seamstress";
-
+import {
+    AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
+} from 'recharts';
 
 class Result extends Component {
     _isMounted = false;
@@ -47,13 +49,22 @@ class Result extends Component {
         this._isMounted = false;
     }
 
-    render() {
 
+
+    render() {
         const {results, isLoading} = this.state;
 
         if (isLoading) {
             return <LoadingIndicator/>
         }
+
+        const chartData = results.map(r => {
+            return {
+                name: r.date,
+                result: r.percentageResult,
+
+            }
+        });
 
         const columns = [
             {
@@ -73,6 +84,8 @@ class Result extends Component {
             }
 
         ];
+        const seamstressName = results.map(r => r.seamstress.name);
+        const seamstresslastName = results.map(r => r.seamstress.lastName);
         const dataSource = results.map(r => {
             return {
                 date: r.date,
@@ -81,7 +94,28 @@ class Result extends Component {
                 key: r.id,
             }
         });
-        return <Table dataSource={dataSource} columns={columns}/>
+
+        return (
+            <div>
+                <br/>
+                <h1>{seamstressName[0]} {seamstresslastName[0]}</h1>
+                <AreaChart
+                    width={1000}
+                    height={200}
+                    data={chartData}
+                    margin={{
+                        top: 20, right: 30, left: 10, bottom: 10,
+                    }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Area type="monotone" dataKey="result" stroke="#333333" fill="#bae7ff" />
+                </AreaChart>
+                <Table dataSource={dataSource} columns={columns}/>
+            </div>
+        )
     }
 }
 

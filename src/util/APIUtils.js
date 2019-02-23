@@ -53,12 +53,6 @@ export function getSeamstressResults(id) {
     });
 }
 
-export function getSeamstressAverage(id) {
-    return request({
-        url: API_BASE_URL + "/seamstress/results/average/" + id,
-        method: 'GET'
-    });
-}
 
 export function signup(signupRequest) {
     return request({
