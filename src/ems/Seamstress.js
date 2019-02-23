@@ -230,7 +230,7 @@ class Seamstress extends Component {
                     })}>Reset
                     </Button>
                     <br/><br/>
-                    <Table dataSource={dataSource} columns={columns}/>
+                    <Table pagination={{ pageSize: 25 }} dataSource={dataSource} columns={columns}/>
                 </div>)
         }
     }
