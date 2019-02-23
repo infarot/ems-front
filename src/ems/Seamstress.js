@@ -23,7 +23,6 @@ class Seamstress extends Component {
             isLoading: false,
             fromDate: '',
             toDate: '',
-            placeholder: ['From', 'To']
         };
     }
 
@@ -223,14 +222,17 @@ class Seamstress extends Component {
                             );
                         }}
                         onChange={this.onChange}
-                        placeholder={this.state.fromDate.length > 1 ? [this.state.fromDate, this.state.toDate] : this.state.placeholder}
+                        placeholder={this.state.fromDate.length > 1 ? [this.state.fromDate, this.state.toDate] : ['From', 'To']}
                     />
-                    <Button className="button" type="primary" onClick={() => this.setState({fromDate: '', toDate: ''}, () => {
-                        this.getSeamstresses();
-                    })}>Reset
+                    <Button
+                        className="button" type="primary"
+                        onClick={() => this.setState({fromDate: '', toDate: ''}, () => {
+                            this.getSeamstresses();
+                        })}>
+                        Reset
                     </Button>
                     <br/><br/>
-                    <Table pagination={{ pageSize: 25 }} dataSource={dataSource} columns={columns}/>
+                    <Table bordered pagination={{pageSize: 25}} dataSource={dataSource} columns={columns}/>
                 </div>)
         }
     }
