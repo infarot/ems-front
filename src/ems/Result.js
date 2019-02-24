@@ -2,9 +2,7 @@ import React, {Component} from 'react'
 import {getSeamstressResults} from "../util/APIUtils";
 import {notification, Table} from "antd";
 import LoadingIndicator from "./Seamstress";
-import {
-    AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-} from 'recharts';
+import {Area, AreaChart, CartesianGrid, Tooltip, XAxis, YAxis,} from 'recharts';
 
 class Result extends Component {
     _isMounted = false;
@@ -50,15 +48,24 @@ class Result extends Component {
     }
 
 
-
     render() {
         const {results, isLoading} = this.state;
+
 
         if (isLoading) {
             return <LoadingIndicator/>
         }
+        let seamstressName = '';
+        let seamstressLastName = '';
+        if (results.length > 0) {
+            seamstressName = results[0].seamstress.name;
+            seamstressLastName = results[0].seamstress.lastName;
 
-        const chartData = results.map(r => {
+        }
+        let sorted = results.sort((a, b) => {
+            return new Date(a.date) - new Date(b.date)
+        });
+        const chartData = sorted.map(r => {
             return {
                 name: r.date,
                 result: r.percentageResult,
@@ -84,9 +91,10 @@ class Result extends Component {
             }
 
         ];
-        const seamstressName = results.map(r => r.seamstress.name);
-        const seamstresslastName = results.map(r => r.seamstress.lastName);
-        const dataSource = results.map(r => {
+        let sorted1 = results.sort((a, b) => {
+            return new Date(b.date) - new Date(a.date)
+        });
+        const dataSource = sorted1.map(r => {
             return {
                 date: r.date,
                 result: r.percentageResult,
@@ -98,7 +106,7 @@ class Result extends Component {
         return (
             <div>
                 <br/>
-                <h1>{seamstressName[0]} {seamstresslastName[0]}</h1>
+                <h1>{seamstressName} {seamstressLastName}</h1>
                 <AreaChart
                     width={1000}
                     height={200}
@@ -107,11 +115,11 @@ class Result extends Component {
                         top: 20, right: 30, left: 10, bottom: 10,
                     }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="result" stroke="#333333" fill="#bae7ff" />
+                    <CartesianGrid strokeDasharray="3 3"/>
+                    <XAxis dataKey="name"/>
+                    <YAxis/>
+                    <Tooltip/>
+                    <Area type="monotone" dataKey="result" stroke="#333333" fill="#bae7ff"/>
                 </AreaChart>
                 <Table dataSource={dataSource} columns={columns}/>
             </div>
