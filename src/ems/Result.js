@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {getSeamstressResults} from "../util/APIUtils";
 import {notification, Table} from "antd";
-import LoadingIndicator from "./Seamstress";
+import LoadingIndicator from "../common/LoadingIndicator";
 import {Area, AreaChart, CartesianGrid, Tooltip, XAxis, YAxis,} from 'recharts';
 import {withRouter} from "react-router-dom";
 

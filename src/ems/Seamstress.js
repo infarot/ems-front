@@ -19,7 +19,7 @@ class Seamstress extends Component {
         this.state = {
             searchText: '',
             seamstress: [],
-            loading: false,
+            seamstressLoading: false,
             fromDate: '',
             toDate: '',
         };
@@ -87,7 +87,7 @@ class Seamstress extends Component {
 
     getSeamstresses = () => {
         this.setState({
-            loading: true
+            seamstressLoading: true
         });
         if (this.state.fromDate.length > 1 && this.state.toDate.length > 1) {
             getSeamstressListFromDateRange(this.state.fromDate, this.state.toDate)
@@ -95,7 +95,7 @@ class Seamstress extends Component {
                     if (this._isMounted) {
                         this.setState({
                             seamstress: response,
-                            loading: false
+                            seamstressLoading: false
                         })
                     }
                 }).catch(error => {
@@ -118,7 +118,7 @@ class Seamstress extends Component {
                     if (this._isMounted) {
                         this.setState({
                             seamstress: response,
-                            loading: false
+                            seamstressLoading: false
                         })
                     }
                 }).catch(error => {
@@ -158,7 +158,7 @@ class Seamstress extends Component {
     render() {
         const {seamstress} = this.state;
 
-        if (this.state.loading) {
+        if (this.state.seamstressLoading) {
             return <LoadingIndicator/>
         }
 

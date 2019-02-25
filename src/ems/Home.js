@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {getShiftProduction} from "../util/APIUtils";
 import {notification, Table} from "antd";
-import LoadingIndicator from "./Seamstress";
+import LoadingIndicator from "../common/LoadingIndicator";
 import "./Home.css"
 import {withRouter} from "react-router-dom";
 
@@ -34,7 +34,7 @@ class Home extends Component {
                 this.props.history.push('/login');
                 notification.error({
                     message: 'EMS',
-                    description: 'You are not eligible to see this content'
+                    description: 'Please login first'
                 });
 
             } else {

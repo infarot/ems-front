@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { login } from '../../util/APIUtils';
+import { login } from '../util/APIUtils';
 import './Login.css';
-import { ACCESS_TOKEN } from '../../constants';
+import { ACCESS_TOKEN } from '../constants';
 
 import { Form, Input, Button, Icon, notification } from 'antd';
 import {withRouter} from "react-router-dom";
