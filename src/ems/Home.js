@@ -121,6 +121,13 @@ class Home extends Component {
                 title: 'Work organization',
                 dataIndex: 'workOrganization',
                 key: 'workOrganization',
+            },
+            {
+                className: 'table-column',
+                align: 'center',
+                title: 'Seamstress Quantity',
+                dataIndex: 'seamstressQuantity',
+                key: 'seamstressQuantity',
             }
 
         ];
@@ -134,6 +141,7 @@ class Home extends Component {
                 perEmployee: Math.round(r.perEmployee),
                 potentialUtilization: Math.round(r.potentialUtilization),
                 workOrganization: Math.round(r.workOrganization),
+                seamstressQuantity: Math.round(r.result/r.perSeamstress),
                 key: r.id,
             }
         });
