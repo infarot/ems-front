@@ -46,6 +46,13 @@ export function getSeamstressListFromDateRange(from, to) {
     });
 }
 
+export function getShiftProduction() {
+    return request({
+        url: API_BASE_URL + "/shiftProduction",
+        method: 'GET'
+    });
+}
+
 export function getSeamstressResults(id) {
     return request({
         url: API_BASE_URL + "/seamstress/dailyResults/" + id,

@@ -14,6 +14,7 @@ import Login from '../user/login/Login';
 import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
+import Home from "../ems/Home"
 
 
 import {Layout, notification} from 'antd';
@@ -101,8 +102,12 @@ class App extends Component {
                             <Route exact path="/login"
                                    render={(props) => <Login onLogin={this.handleLogin} {...props} />}>
                             </Route>
+
+                            <Route exact path="/" render={() => <Home token={localStorage.getItem(ACCESS_TOKEN)}
+                                                                                      authenticated={this.state.isAuthenticated}/>}>
+                            </Route>
                             <Route path="/result/:id" component={Result}/>
-                            <Route exact path="/" render={() => <Seamstress token={localStorage.getItem(ACCESS_TOKEN)}
+                            <Route exact path="/seamstress" render={() => <Seamstress token={localStorage.getItem(ACCESS_TOKEN)}
                                                                             authenticated={this.state.isAuthenticated}/>}>
                             </Route>
                             <Route component={NotFound}/>
