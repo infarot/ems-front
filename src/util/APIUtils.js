@@ -23,7 +23,6 @@ const request = (options) => {
         );
 };
 
-
 export function login(loginRequest) {
     return request({
         url: API_BASE_URL + "/auth/signin",
@@ -41,7 +40,7 @@ export function getSeamstressList() {
 
 export function getSeamstressListFromDateRange(from, to) {
     return request({
-        url: API_BASE_URL + "/seamstress/"+from+"/"+to,
+        url: API_BASE_URL + "/seamstress/" + from + "/" + to,
         method: 'GET'
     });
 }
@@ -60,7 +59,6 @@ export function getSeamstressResults(id) {
     });
 }
 
-
 export function signup(signupRequest) {
     return request({
         url: API_BASE_URL + "/auth/signup",
@@ -68,14 +66,6 @@ export function signup(signupRequest) {
         body: JSON.stringify(signupRequest)
     });
 }
-
-export function checkUsernameAvailability(username) {
-    return request({
-        url: API_BASE_URL + "/user/checkUsernameAvailability?username=" + username,
-        method: 'GET'
-    });
-}
-
 
 export function getCurrentUser() {
     if (!localStorage.getItem(ACCESS_TOKEN)) {
@@ -86,12 +76,4 @@ export function getCurrentUser() {
         url: API_BASE_URL + "/user/me",
         method: 'GET'
     });
-}
-
-export function getUserProfile(username) {
-    return request({
-        url: API_BASE_URL + "/users/" + username,
-        method: 'GET'
-    });
-
 }

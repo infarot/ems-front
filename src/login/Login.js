@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import { login } from '../util/APIUtils';
+import React, {Component} from 'react';
+import {login} from '../util/APIUtils';
 import './Login.css';
-import { ACCESS_TOKEN } from '../constants';
+import {ACCESS_TOKEN} from '../constants';
 
-import { Form, Input, Button, Icon, notification } from 'antd';
+import {Form, Input, Button, Icon, notification} from 'antd';
 import {withRouter} from "react-router-dom";
+
 const FormItem = Form.Item;
 
 class Login extends Component {
@@ -14,7 +15,7 @@ class Login extends Component {
             <div className="login-container">
                 <h1 className="page-title">Login</h1>
                 <div className="login-content">
-                    <AntWrappedLoginForm onLogin={this.props.onLogin} />
+                    <AntWrappedLoginForm onLogin={this.props.onLogin}/>
                 </div>
             </div>
         );
@@ -22,39 +23,34 @@ class Login extends Component {
 }
 
 class LoginForm extends Component {
-    constructor(props) {
-        super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();   
+    handleSubmit = (event) => {
+        event.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const loginRequest = Object.assign({}, values);
                 login(loginRequest)
-                .then(response => {
-                    localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-                    this.props.onLogin();
-                }).catch(error => {
-                    if(error.status === 401) {
+                    .then(response => {
+                        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+                        this.props.onLogin();
+                    }).catch(error => {
+                    if (error.status === 401) {
                         notification.error({
                             message: 'EMS',
                             description: 'Your Username or Password is incorrect. Please try again!'
-                        });                    
+                        });
                     } else {
                         notification.error({
                             message: 'EMS',
                             description: error.message || 'Sorry! Something went wrong. Please try again!'
-                        });                                            
+                        });
                     }
                 });
             }
         });
-    }
+    };
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const {getFieldDecorator} = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit} className="login-form">
                 <FormItem>

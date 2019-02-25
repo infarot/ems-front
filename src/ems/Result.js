@@ -33,7 +33,7 @@ class Result extends Component {
                 this.props.history.push('/login');
                 notification.error({
                     message: 'EMS',
-                    description: 'You are not eligible to see this content'
+                    description: 'Please login first'
                 });
             } else {
                 notification.error({
@@ -52,90 +52,88 @@ class Result extends Component {
 
     }
 
-        componentWillUnmount()
-        {
-            this._isMounted = false;
-        }
-
-
-        render()
-        {
-            const {results} = this.state;
-
-
-            if (this.state.resultLoading) {
-                return <LoadingIndicator/>
-            }
-            let seamstressName = '';
-            let seamstressLastName = '';
-            if (results.length > 0) {
-                seamstressName = results[0].seamstress.name;
-                seamstressLastName = results[0].seamstress.lastName;
-
-            }
-            let sorted = results.sort((a, b) => {
-                return new Date(a.date) - new Date(b.date)
-            });
-            const chartData = sorted.map(r => {
-                return {
-                    name: r.date,
-                    result: r.percentageResult,
-
-                }
-            });
-
-            const columns = [
-                {
-                    title: 'Date',
-                    dataIndex: 'date',
-                    key: 'date',
-                },
-                {
-                    title: 'Result',
-                    dataIndex: 'result',
-                    key: 'result',
-                },
-                {
-                    title: 'Shift',
-                    dataIndex: 'shift',
-                    key: 'shift',
-                }
-
-            ];
-            let sorted1 = results.sort((a, b) => {
-                return new Date(b.date) - new Date(a.date)
-            });
-            const dataSource = sorted1.map(r => {
-                return {
-                    date: r.date,
-                    result: r.percentageResult,
-                    shift: r.shift,
-                    key: r.id,
-                }
-            });
-
-            return (
-                <div>
-                    <br/>
-                    <h1>{seamstressName} {seamstressLastName}</h1>
-                    <AreaChart
-                        width={1000}
-                        height={200}
-                        data={chartData}
-                        margin={{
-                            top: 20, right: 30, left: 10, bottom: 10,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3"/>
-                        <XAxis dataKey="name"/>
-                        <YAxis/>
-                        <Tooltip/>
-                        <Area type="monotone" dataKey="result" stroke="#333333" fill="#bae7ff"/>
-                    </AreaChart>
-                    <Table dataSource={dataSource} columns={columns}/>
-                </div>
-            )
-        }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
-    export default withRouter(Result)
+
+    render() {
+        const {results} = this.state;
+
+
+        if (this.state.resultLoading) {
+            return <LoadingIndicator/>
+        }
+        let seamstressName = '';
+        let seamstressLastName = '';
+        if (results.length > 0) {
+            seamstressName = results[0].seamstress.name;
+            seamstressLastName = results[0].seamstress.lastName;
+
+        }
+        let sorted = results.sort((a, b) => {
+            return new Date(a.date) - new Date(b.date)
+        });
+        const chartData = sorted.map(r => {
+            return {
+                name: r.date,
+                result: r.percentageResult,
+
+            }
+        });
+
+        const columns = [
+            {
+                title: 'Date',
+                dataIndex: 'date',
+                key: 'date',
+            },
+            {
+                title: 'Result',
+                dataIndex: 'result',
+                key: 'result',
+            },
+            {
+                title: 'Shift',
+                dataIndex: 'shift',
+                key: 'shift',
+            }
+
+        ];
+        let sorted1 = results.sort((a, b) => {
+            return new Date(b.date) - new Date(a.date)
+        });
+        const dataSource = sorted1.map(r => {
+            return {
+                date: r.date,
+                result: r.percentageResult,
+                shift: r.shift,
+                key: r.id,
+            }
+        });
+
+        return (
+            <div>
+                <br/>
+                <h1>{seamstressName} {seamstressLastName}</h1>
+                <AreaChart
+                    width={1000}
+                    height={200}
+                    data={chartData}
+                    margin={{
+                        top: 20, right: 30, left: 10, bottom: 10,
+                    }}
+                >
+                    <CartesianGrid strokeDasharray="3 3"/>
+                    <XAxis dataKey="name"/>
+                    <YAxis/>
+                    <Tooltip/>
+                    <Area type="monotone" dataKey="result" stroke="#333333" fill="#bae7ff"/>
+                </AreaChart>
+                <Table dataSource={dataSource} columns={columns}/>
+            </div>
+        )
+    }
+}
+
+export default withRouter(Result)
