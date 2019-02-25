@@ -3,35 +3,40 @@ import {getShiftProduction} from "../util/APIUtils";
 import {notification, Table} from "antd";
 import LoadingIndicator from "./Seamstress";
 import "./Home.css"
+import {withRouter} from "react-router-dom";
 
-class Result extends Component {
+class Home extends Component {
     _isMounted = false;
 
     constructor(props) {
         super(props);
         this.state = {
             results: [],
-            isLoading: false
+            homeLoading: false
         }
     }
 
-    componentDidMount() {
-        this._isMounted = true;
+    getSProd = () => {
+        this.setState({
+            homeLoading: true
+        });
 
         getShiftProduction()
             .then(response => {
                 if (this._isMounted) {
                     this.setState({
                         results: response,
-                        isLoading: false
+                        homeLoading: false
                     })
                 }
             }).catch(error => {
             if (error.status === 401) {
+                this.props.history.push('/login');
                 notification.error({
                     message: 'EMS',
                     description: 'You are not eligible to see this content'
                 });
+
             } else {
                 notification.error({
                     message: 'EMS',
@@ -39,6 +44,11 @@ class Result extends Component {
                 });
             }
         });
+    };
+
+    componentDidMount() {
+        this._isMounted = true;
+        this.getSProd();
 
     }
 
@@ -48,10 +58,10 @@ class Result extends Component {
 
 
     render() {
-        const {results, isLoading} = this.state;
+        const {results} = this.state;
 
 
-        if (isLoading) {
+        if (this.state.homeLoading) {
             return <LoadingIndicator/>
         }
 
@@ -61,52 +71,52 @@ class Result extends Component {
                 title: 'Date',
                 dataIndex: 'date',
                 key: 'date',
-                className:'table-column',
+                className: 'table-column',
             },
             {
                 align: 'center',
                 title: 'Result',
-                className:'table-column',
+                className: 'table-column',
                 dataIndex: 'result',
                 key: 'result',
             },
             {
-                className:'table-column',
+                className: 'table-column',
                 align: 'center',
                 title: 'Shift',
                 dataIndex: 'shift',
                 key: 'shift',
             },
             {
-                className:'table-column',
+                className: 'table-column',
                 align: 'center',
                 title: 'Per seamstress',
                 dataIndex: 'perSeamstress',
                 key: 'perSeamstress',
             },
             {
-                className:'table-column',
+                className: 'table-column',
                 align: 'center',
                 title: 'Per seamstress + qc',
                 dataIndex: 'perSeamstressQc',
                 key: 'perSeamstressQc',
             },
             {
-                className:'table-column',
+                className: 'table-column',
                 align: 'center',
                 title: 'Per all',
                 dataIndex: 'perEmployee',
                 key: 'perEmployee',
             },
             {
-                className:'table-column',
+                className: 'table-column',
                 align: 'center',
                 title: 'Potential utilization',
                 dataIndex: 'potentialUtilization',
                 key: 'potentialUtilization',
             },
             {
-                className:'table-column',
+                className: 'table-column',
                 align: 'center',
                 title: 'Work organization',
                 dataIndex: 'workOrganization',
@@ -136,4 +146,4 @@ class Result extends Component {
     }
 }
 
-export default Result
+export default withRouter(Home)

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {getSeamstressList, getSeamstressListFromDateRange} from "../util/APIUtils";
 import "./Seamstress.css"
 import LoadingIndicator from "../common/LoadingIndicator";
-import {Redirect, Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {
     Table, Input, Button, Icon, notification, DatePicker
 } from 'antd';
@@ -16,12 +16,10 @@ class Seamstress extends Component {
 
     constructor(props) {
         super(props);
-        this.getSeamstresses = this.getSeamstresses.bind(this);
         this.state = {
             searchText: '',
-            ready: false,
             seamstress: [],
-            isLoading: false,
+            loading: false,
             fromDate: '',
             toDate: '',
         };
@@ -87,9 +85,9 @@ class Seamstress extends Component {
     };
 
 
-    getSeamstresses() {
+    getSeamstresses = () => {
         this.setState({
-            isLoading: true
+            loading: true
         });
         if (this.state.fromDate.length > 1 && this.state.toDate.length > 1) {
             getSeamstressListFromDateRange(this.state.fromDate, this.state.toDate)
@@ -97,21 +95,35 @@ class Seamstress extends Component {
                     if (this._isMounted) {
                         this.setState({
                             seamstress: response,
-                            isLoading: false
+                            loading: false
                         })
                     }
-                });
+                }).catch(error => {
+                if (error.status === 401) {
+                    this.props.history.push('/login');
+                    notification.error({
+                        message: 'EMS',
+                        description: 'Please login first'
+                    });
+                } else {
+                    notification.error({
+                        message: 'EMS',
+                        description: error.message || 'Something went wrong. Please try again'
+                    });
+                }
+            });
         } else {
             getSeamstressList()
                 .then(response => {
                     if (this._isMounted) {
                         this.setState({
                             seamstress: response,
-                            isLoading: false
+                            loading: false
                         })
                     }
                 }).catch(error => {
                 if (error.status === 401) {
+                    this.props.history.push('/login');
                     notification.error({
                         message: 'EMS',
                         description: 'Please login first'
@@ -124,7 +136,7 @@ class Seamstress extends Component {
                 }
             });
         }
-    }
+    };
 
 
     componentDidMount() {
@@ -144,9 +156,9 @@ class Seamstress extends Component {
     };
 
     render() {
-        const {seamstress, isLoading} = this.state;
+        const {seamstress} = this.state;
 
-        if (isLoading) {
+        if (this.state.loading) {
             return <LoadingIndicator/>
         }
 
@@ -207,45 +219,36 @@ class Seamstress extends Component {
                 </Link>
             }
         });
-        if (!this.props.token) {
-            return (
-                <Redirect
-                    to={{
-                        pathname: '/login',
-                    }}/>
-            );
-        } else {
-            return (
-                <div>
-                    <br/>
-                    <RangePicker
-                        dateRender={(current) => {
-                            const style = {};
-                            if (current.date() === 1) {
-                                style.border = '1px solid #1890ff';
-                                style.borderRadius = '50%';
-                            }
-                            return (
-                                <div className="ant-calendar-date" style={style}>
-                                    {current.date()}
-                                </div>
-                            );
-                        }}
-                        onChange={this.onChange}
-                        placeholder={this.state.fromDate.length > 1 ? [this.state.fromDate, this.state.toDate] : ['From', 'To']}
-                    />
-                    <Button
-                        className="button" type="primary"
-                        onClick={() => this.setState({fromDate: '', toDate: ''}, () => {
-                            this.getSeamstresses();
-                        })}>
-                        Reset
-                    </Button>
-                    <br/><br/>
-                    <Table bordered pagination={{pageSize: 25}} dataSource={dataSource} columns={columns}/>
-                </div>)
-        }
+        return (
+            <div>
+                <br/>
+                <RangePicker
+                    dateRender={(current) => {
+                        const style = {};
+                        if (current.date() === 1) {
+                            style.border = '1px solid #1890ff';
+                            style.borderRadius = '50%';
+                        }
+                        return (
+                            <div className="ant-calendar-date" style={style}>
+                                {current.date()}
+                            </div>
+                        );
+                    }}
+                    onChange={this.onChange}
+                    placeholder={this.state.fromDate.length > 1 ? [this.state.fromDate, this.state.toDate] : ['From', 'To']}
+                />
+                <Button
+                    className="button" type="primary"
+                    onClick={() => this.setState({fromDate: '', toDate: ''}, () => {
+                        this.getSeamstresses();
+                    })}>
+                    Reset
+                </Button>
+                <br/><br/>
+                <Table bordered pagination={{pageSize: 25}} dataSource={dataSource} columns={columns}/>
+            </div>)
     }
 }
 
-export default Seamstress;
+export default withRouter(Seamstress);

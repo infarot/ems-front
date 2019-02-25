@@ -4,6 +4,7 @@ import './Login.css';
 import { ACCESS_TOKEN } from '../../constants';
 
 import { Form, Input, Button, Icon, notification } from 'antd';
+import {withRouter} from "react-router-dom";
 const FormItem = Form.Item;
 
 class Login extends Component {
@@ -88,4 +89,4 @@ class LoginForm extends Component {
 }
 
 
-export default Login;
+export default withRouter(Login);

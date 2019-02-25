@@ -35,7 +35,7 @@ class App extends Component {
         notification.config({
             placement: 'topRight',
             top: 70,
-            duration: 3,
+            duration: 1.5,
         });
     }
 
@@ -99,16 +99,15 @@ class App extends Component {
                 <Content className="app-content">
                     <div className="container">
                         <Switch>
+                            <Route exact path="/" render={() => <Home history={this.props.history}
+                                                                          authenticated={this.state.isAuthenticated}/>}>
+                            </Route>
                             <Route exact path="/login"
-                                   render={(props) => <Login onLogin={this.handleLogin} {...props} />}>
+                                   render={(props) => <Login  history={this.props.history} onLogin={this.handleLogin} {...props} />}>
                             </Route>
-
-                            <Route exact path="/" render={() => <Home token={localStorage.getItem(ACCESS_TOKEN)}
+                            <Route exact path="/result/:id" component={Result}/>
+                            <Route exact path="/seamstress" render={() => <Seamstress history={this.props.history}
                                                                                       authenticated={this.state.isAuthenticated}/>}>
-                            </Route>
-                            <Route path="/result/:id" component={Result}/>
-                            <Route exact path="/seamstress" render={() => <Seamstress token={localStorage.getItem(ACCESS_TOKEN)}
-                                                                            authenticated={this.state.isAuthenticated}/>}>
                             </Route>
                             <Route component={NotFound}/>
                         </Switch>
