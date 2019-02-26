@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {getShiftProduction} from "../util/APIUtils";
-import {notification, Table} from "antd";
+import {notification, Progress, Table} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 import "./Home.css"
 import {withRouter} from "react-router-dom";
@@ -90,14 +90,14 @@ class Home extends Component {
             {
                 className: 'table-column',
                 align: 'center',
-                title: 'Per seamstress',
+                title: 'Per sts',
                 dataIndex: 'perSeamstress',
                 key: 'perSeamstress',
             },
             {
                 className: 'table-column',
                 align: 'center',
-                title: 'Per seamstress + qc',
+                title: 'Per sts + qc',
                 dataIndex: 'perSeamstressQc',
                 key: 'perSeamstressQc',
             },
@@ -111,23 +111,30 @@ class Home extends Component {
             {
                 className: 'table-column',
                 align: 'center',
-                title: 'Potential utilization',
+                title: 'Potential ut.',
                 dataIndex: 'potentialUtilization',
                 key: 'potentialUtilization',
             },
             {
                 className: 'table-column',
                 align: 'center',
-                title: 'Work organization',
+                title: 'Organization',
                 dataIndex: 'workOrganization',
                 key: 'workOrganization',
             },
             {
                 className:'table-column',
                 align: 'center',
-                title: 'Seamstress quantity',
+                title: 'Seamstress qt.',
                 dataIndex: 'seamstressQuantity',
                 key: 'seamstressQuantity',
+            },
+            {
+                className:'table-column',
+                align: 'center',
+                title: 'Efficiency',
+                dataIndex: 'efficiency',
+                key: 'efficiency',
             }
 
         ];
@@ -139,9 +146,15 @@ class Home extends Component {
                 perSeamstress: Math.round(r.perSeamstress),
                 perSeamstressQc: Math.round(r.perSeamstressQc),
                 perEmployee: Math.round(r.perEmployee),
-                potentialUtilization: Math.round(r.potentialUtilization),
-                workOrganization: Math.round(r.workOrganization),
+                potentialUtilization:
+                    r.potentialUtilization > 81 ?
+                    <Progress strokeColor = "#44EF29" status="normal" percent={Math.round(r.potentialUtilization)}/>  : <Progress strokeColor = "#FFF700" status="normal" percent={Math.round(r.potentialUtilization)} />,
+                workOrganization: r.workOrganization > 90 ?
+                    <Progress strokeColor = "#44EF29" status="normal" percent={Math.round(r.workOrganization)}/>  : <Progress strokeColor = "#FFF700" status="normal" percent={Math.round(r.workOrganization)} />,
                 seamstressQuantity: Math.round(r.result/r.perSeamstress),
+                efficiency:
+                    Math.round(r.perSeamstress*1.4286) > 86 ?
+                    <Progress width={50} strokeColor = "#44EF29" type="circle" percent={Math.round(r.perSeamstress*1.4286)} format={percent => `${percent}`} /> : <Progress strokeColor = "#FFF700" width={50} type="circle" percent={Math.round(r.perSeamstress*1.4286)} format={percent => `${percent}`} />,
                 key: r.id,
             }
         });
