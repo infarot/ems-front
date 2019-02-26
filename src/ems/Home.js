@@ -123,9 +123,9 @@ class Home extends Component {
                 key: 'workOrganization',
             },
             {
-                className: 'table-column',
+                className:'table-column',
                 align: 'center',
-                title: 'Seamstress Quantity',
+                title: 'Seamstress quantity',
                 dataIndex: 'seamstressQuantity',
                 key: 'seamstressQuantity',
             }
