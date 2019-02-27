@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {getShiftProduction} from "../util/APIUtils";
+import {getMonthStatistics, getShiftProduction} from "../util/APIUtils";
 import {notification, Progress, Table} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 import "./Home.css"
@@ -12,11 +12,50 @@ class Home extends Component {
         super(props);
         this.state = {
             results: [],
+            monthStat: [],
+            month: 0,
             homeLoading: false
         }
     }
 
-    getSProd = () => {
+    getCurrentMonth = () => {
+        this.setState({month: new Date().getMonth() + 1}, () => {
+                this.getStat();
+            }
+        );
+    };
+
+    getStat = () => {
+        this.setState({
+            homeLoading: true
+        });
+
+        getMonthStatistics(this.state.month)
+            .then(response => {
+                if (this._isMounted) {
+                    this.setState({
+                        monthStat: response,
+                        homeLoading: false
+                    })
+                }
+            }).catch(error => {
+            if (error.status === 401) {
+                this.props.history.push('/login');
+                notification.error({
+                    message: 'EMS',
+                    description: 'Please login first'
+                });
+
+            } else {
+                notification.error({
+                    message: 'EMS',
+                    description: error.message || 'Something went wrong. Please try again'
+                });
+            }
+        });
+    };
+
+    getShiftProd = () => {
         this.setState({
             homeLoading: true
         });
@@ -48,22 +87,24 @@ class Home extends Component {
 
     componentDidMount() {
         this._isMounted = true;
-        this.getSProd();
-
+        this.getCurrentMonth();
+        this.getShiftProd();
     }
 
     componentWillUnmount() {
         this._isMounted = false;
     }
 
-
     render() {
-        const {results} = this.state;
-
+        const {results, monthStat} = this.state;
 
         if (this.state.homeLoading) {
             return <LoadingIndicator/>
         }
+
+        const averagePerAll = monthStat.averagePerAll;
+        const averageResult = monthStat.averageResult;
+
 
         const columns = [
             {
@@ -123,14 +164,14 @@ class Home extends Component {
                 key: 'workOrganization',
             },
             {
-                className:'table-column',
+                className: 'table-column',
                 align: 'center',
                 title: 'Seamstress qt.',
                 dataIndex: 'seamstressQuantity',
                 key: 'seamstressQuantity',
             },
             {
-                className:'table-column',
+                className: 'table-column',
                 align: 'center',
                 title: 'Efficiency',
                 dataIndex: 'efficiency',
@@ -138,6 +179,7 @@ class Home extends Component {
             }
 
         ];
+
         const dataSource = results.map(r => {
             return {
                 date: r.date,
@@ -148,19 +190,31 @@ class Home extends Component {
                 perEmployee: Math.round(r.perEmployee),
                 potentialUtilization:
                     r.potentialUtilization > 81 ?
-                    <Progress strokeColor = "#44EF29" status="normal" percent={Math.round(r.potentialUtilization)}/>  : <Progress strokeColor = "#FFF700" status="normal" percent={Math.round(r.potentialUtilization)} />,
+                        <Progress strokeColor="#44EF29" status="normal" percent={Math.round(r.potentialUtilization)}/> :
+                        <Progress strokeColor="#FFF700" status="normal" percent={Math.round(r.potentialUtilization)}/>,
                 workOrganization: r.workOrganization > 90 ?
-                    <Progress strokeColor = "#44EF29" status="normal" percent={Math.round(r.workOrganization)}/>  : <Progress strokeColor = "#FFF700" status="normal" percent={Math.round(r.workOrganization)} />,
-                seamstressQuantity: Math.round(r.result/r.perSeamstress),
+                    <Progress strokeColor="#44EF29" status="normal" percent={Math.round(r.workOrganization)}/> :
+                    <Progress strokeColor="#FFF700" status="normal" percent={Math.round(r.workOrganization)}/>,
+                seamstressQuantity: Math.round(r.result / r.perSeamstress),
                 efficiency:
-                    Math.round(r.perSeamstress*1.4286) > 86 ?
-                    <Progress width={50} strokeColor = "#44EF29" type="circle" percent={Math.round(r.perSeamstress*1.4286)} format={percent => `${percent}`} /> : <Progress strokeColor = "#FFF700" width={50} type="circle" percent={Math.round(r.perSeamstress*1.4286)} format={percent => `${percent}`} />,
+                    Math.round(r.perSeamstress * 1.4286) > 86 ?
+                        <Progress width={50} strokeColor="#44EF29" type="circle"
+                                  percent={Math.round(r.perSeamstress * 1.4286)} format={percent => `${percent}`}/> :
+                        <Progress strokeColor="#FFF700" width={50} type="circle"
+                                  percent={Math.round(r.perSeamstress * 1.4286)} format={percent => `${percent}`}/>,
                 key: r.id,
             }
         });
 
+
         return (
             <div>
+                <h2>Month statistics:</h2>
+                <h1>Average per sts: {Math.round(averagePerAll)} | Average result: {Math.round(averageResult)} | Average efficiency: {Math.round(averagePerAll * 1.4286) > 86 ?
+                    <Progress width={70} strokeColor="#44EF29" type="circle"
+                              percent={Math.round(averagePerAll * 1.4286)} format={percent => `${percent}`}/> :
+                    <Progress strokeColor="#FFF700" width={70} type="circle"
+                              percent={Math.round(averagePerAll * 1.4286)} format={percent => `${percent}`}/>}</h1>
                 <Table bordered dataSource={dataSource} columns={columns}/>
             </div>
         )

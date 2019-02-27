@@ -1,3 +1,11 @@
 .table-column{
     font-size: 14px;
 }
+h1{
+    font-size: medium;
+    text-align: center;
+    padding-top: 5px;
+}
+h2 {
+    text-align: center;
+}
