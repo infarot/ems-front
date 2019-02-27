@@ -104,6 +104,7 @@ class Home extends Component {
 
         const averagePerAll = monthStat.averagePerAll;
         const averageResult = monthStat.averageResult;
+        const averageWorkOrganization = monthStat.averageWorkOrganization;
 
 
         const columns = [
@@ -159,13 +160,6 @@ class Home extends Component {
             {
                 className: 'table-column',
                 align: 'center',
-                title: 'Organization',
-                dataIndex: 'workOrganization',
-                key: 'workOrganization',
-            },
-            {
-                className: 'table-column',
-                align: 'center',
                 title: 'Seamstress qt.',
                 dataIndex: 'seamstressQuantity',
                 key: 'seamstressQuantity',
@@ -192,16 +186,13 @@ class Home extends Component {
                     r.potentialUtilization > 81 ?
                         <Progress strokeColor="#44EF29" status="normal" percent={Math.round(r.potentialUtilization)}/> :
                         <Progress strokeColor="#FFF700" status="normal" percent={Math.round(r.potentialUtilization)}/>,
-                workOrganization: r.workOrganization > 90 ?
-                    <Progress strokeColor="#44EF29" status="normal" percent={Math.round(r.workOrganization)}/> :
-                    <Progress strokeColor="#FFF700" status="normal" percent={Math.round(r.workOrganization)}/>,
                 seamstressQuantity: Math.round(r.result / r.perSeamstress),
                 efficiency:
-                    Math.round(r.perSeamstress * 1.4286) > 86 ?
+                    Math.round(r.workOrganization) > 90 ?
                         <Progress width={50} strokeColor="#44EF29" type="circle"
-                                  percent={Math.round(r.perSeamstress * 1.4286)} format={percent => `${percent}`}/> :
+                                  percent={Math.round(r.workOrganization)} format={percent => `${percent}`}/> :
                         <Progress strokeColor="#FFF700" width={50} type="circle"
-                                  percent={Math.round(r.perSeamstress * 1.4286)} format={percent => `${percent}`}/>,
+                                  percent={Math.round(r.workOrganization)} format={percent => `${percent}`}/>,
                 key: r.id,
             }
         });
@@ -210,11 +201,11 @@ class Home extends Component {
         return (
             <div>
                 <h2>Month statistics:</h2>
-                <h1>Average per sts: {Math.round(averagePerAll)} | Average result: {Math.round(averageResult)} | Average efficiency: {Math.round(averagePerAll * 1.4286) > 86 ?
+                <h1>Average per sts: {Math.round(averagePerAll)} | Average result: {Math.round(averageResult)} | Average efficiency: {Math.round(averageWorkOrganization) > 90 ?
                     <Progress width={70} strokeColor="#44EF29" type="circle"
-                              percent={Math.round(averagePerAll * 1.4286)} format={percent => `${percent}`}/> :
+                              percent={Math.round(averageWorkOrganization)} format={percent => `${percent}`}/> :
                     <Progress strokeColor="#FFF700" width={70} type="circle"
-                              percent={Math.round(averagePerAll * 1.4286)} format={percent => `${percent}`}/>}</h1>
+                              percent={Math.round(averageWorkOrganization)} format={percent => `${percent}`}/>}</h1>
                 <Table bordered dataSource={dataSource} columns={columns}/>
             </div>
         )
