@@ -15,6 +15,7 @@ import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import Home from "../ems/Home"
+import History from "../ems/History"
 
 
 import {Layout, notification} from 'antd';
@@ -106,6 +107,9 @@ class App extends Component {
                                    render={(props) => <Login  history={this.props.history} onLogin={this.handleLogin} {...props} />}>
                             </Route>
                             <Route exact path="/result/:id" component={Result}/>
+                            <Route exact path="/history" render={() => <History history={this.props.history}
+                                                                                      authenticated={this.state.isAuthenticated}/>}>
+                            </Route>
                             <Route exact path="/seamstress" render={() => <Seamstress history={this.props.history}
                                                                                       authenticated={this.state.isAuthenticated}/>}>
                             </Route>

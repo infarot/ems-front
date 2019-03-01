@@ -3,7 +3,8 @@ import {getMonthStatistics, getShiftProduction} from "../util/APIUtils";
 import {notification, Progress, Table} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 import "./Home.css"
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
+import Button from "antd/lib/button";
 
 class Home extends Component {
     _isMounted = false;
@@ -14,12 +15,16 @@ class Home extends Component {
             results: [],
             monthStat: [],
             month: 0,
+            year: 0,
             homeLoading: false
         }
     }
 
-    getCurrentMonth = () => {
-        this.setState({month: new Date().getMonth() + 1}, () => {
+    getCurrentMonthAndYear = () => {
+        this.setState({
+                month: new Date().getMonth() + 1,
+                year: new Date().getFullYear()
+            }, () => {
                 this.getStat();
             }
         );
@@ -30,7 +35,7 @@ class Home extends Component {
             homeLoading: true
         });
 
-        getMonthStatistics(this.state.month)
+        getMonthStatistics(this.state.month, this.state.year)
             .then(response => {
                 if (this._isMounted) {
                     this.setState({
@@ -41,10 +46,6 @@ class Home extends Component {
             }).catch(error => {
             if (error.status === 401) {
                 this.props.history.push('/login');
-                notification.error({
-                    message: 'EMS',
-                    description: 'Please login first'
-                });
 
             } else {
                 notification.error({
@@ -87,7 +88,7 @@ class Home extends Component {
 
     componentDidMount() {
         this._isMounted = true;
-        this.getCurrentMonth();
+        this.getCurrentMonthAndYear();
         this.getShiftProd();
     }
 
@@ -200,12 +201,19 @@ class Home extends Component {
 
         return (
             <div>
-                <h2>Month statistics:</h2>
-                <h1>Average per sts: {Math.round(averagePerAll)} | Average result: {Math.round(averageResult)} | Average efficiency: {Math.round(averageWorkOrganization) > 90 ?
-                    <Progress width={70} strokeColor="#44EF29" type="circle"
-                              percent={Math.round(averageWorkOrganization)} format={percent => `${percent}`}/> :
-                    <Progress strokeColor="#FFF700" width={70} type="circle"
-                              percent={Math.round(averageWorkOrganization)} format={percent => `${percent}`}/>}</h1>
+                <h2>Month statistics:
+                    <Link to={{
+                        pathname: `/history`,
+                    }}>
+                        <Button className="history-button" type="primary" size="small">History</Button>
+                    </Link>
+                </h2>
+                <h1>Average per sts: {Math.round(averagePerAll)} | Average result: {Math.round(averageResult)} | Average
+                    efficiency: {Math.round(averageWorkOrganization) > 90 ?
+                        <Progress width={70} strokeColor="#44EF29" type="circle"
+                                  percent={Math.round(averageWorkOrganization)} format={percent => `${percent}`}/> :
+                        <Progress strokeColor="#FFF700" width={70} type="circle"
+                                  percent={Math.round(averageWorkOrganization)} format={percent => `${percent}`}/>}</h1>
                 <Table bordered dataSource={dataSource} columns={columns}/>
             </div>
         )

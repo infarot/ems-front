@@ -4,6 +4,7 @@ import {notification, Table} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 import {Area, AreaChart, CartesianGrid, Tooltip, XAxis, YAxis,} from 'recharts';
 import {withRouter} from "react-router-dom";
+import "./Result.css"
 
 class Result extends Component {
     _isMounted = false;
@@ -106,7 +107,7 @@ class Result extends Component {
         const dataSource = sorted1.map(r => {
             return {
                 date: r.date,
-                result: r.percentageResult,
+                result: Math.round(r.percentageResult),
                 shift: r.shift,
                 key: r.id,
             }

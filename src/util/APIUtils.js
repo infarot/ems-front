@@ -45,9 +45,9 @@ export function getSeamstressListFromDateRange(from, to) {
     });
 }
 
-export function getMonthStatistics(month) {
+export function getMonthStatistics(month, year) {
     return request({
-        url: API_BASE_URL + "/shiftProduction/monthStatistics/"+month,
+        url: API_BASE_URL + "/shiftProduction/monthStatistics/" + month + "/" + year,
         method: 'GET'
     });
 }

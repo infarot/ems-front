@@ -3,3 +3,12 @@
   margin-top: 64px;
   color: #555555;
 }
+
+h1{
+  font-size: 20px;
+  text-align: center;
+  padding-top: 5px;
+}
+h2 {
+  text-align: center;
+}
