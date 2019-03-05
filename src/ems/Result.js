@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {getSeamstressResults} from "../util/APIUtils";
 import {notification, Table} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
-import {Area, AreaChart, CartesianGrid, Tooltip, XAxis, YAxis,} from 'recharts';
+import {Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,} from 'recharts';
 import {withRouter} from "react-router-dom";
 import "./Result.css"
 
@@ -117,6 +117,7 @@ class Result extends Component {
             <div>
                 <br/>
                 <h1>{seamstressName} {seamstressLastName}</h1>
+                <ResponsiveContainer height={210} width="100%">
                 <AreaChart
                     width={1000}
                     height={200}
@@ -131,6 +132,7 @@ class Result extends Component {
                     <Tooltip/>
                     <Area type="monotone" dataKey="result" stroke="#333333" fill="#bae7ff"/>
                 </AreaChart>
+                </ResponsiveContainer>
                 <Table dataSource={dataSource} columns={columns}/>
             </div>
         )
