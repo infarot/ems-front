@@ -57,7 +57,7 @@ class Quilting extends Component {
         const {quiltingData} = this.state;
 
 
-        if (this.state.resultLoading) {
+        if (this.state.quiltingLoading) {
             return <LoadingIndicator/>
         }
 
