@@ -72,10 +72,6 @@ class Home extends Component {
             }).catch(error => {
             if (error.status === 401) {
                 this.props.history.push('/login');
-                notification.error({
-                    message: 'EMS',
-                    description: 'Please login first'
-                });
 
             } else {
                 notification.error({

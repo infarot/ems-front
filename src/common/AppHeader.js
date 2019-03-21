@@ -22,12 +22,17 @@ class AppHeader extends Component {
             menuItems = [
                 <Menu.Item key="/">
                     <Link to="/">
-                        <Icon type="home" className="nav-icon"/>
+                        <span>Summary</span>
                     </Link>
                 </Menu.Item>,
                 <Menu.Item key="/seamstress">
                     <Link to="/seamstress">
-                        <Icon type="rise" className="nav-icon"/>
+                        <span>Seamstress</span>
+                    </Link>
+                </Menu.Item>,
+                <Menu.Item key="/quilting">
+                    <Link to="/quilting">
+                        <span>Quilting</span>
                     </Link>
                 </Menu.Item>,
                 <Menu.Item key="/profile" className="profile-menu">

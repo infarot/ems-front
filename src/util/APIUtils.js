@@ -66,6 +66,13 @@ export function getSeamstressResults(id) {
     });
 }
 
+export function getQuiltingData() {
+    return request({
+        url: API_BASE_URL + "/quilting",
+        method: 'GET'
+    });
+}
+
 export function signup(signupRequest) {
     return request({
         url: API_BASE_URL + "/auth/signup",

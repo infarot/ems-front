@@ -21,6 +21,7 @@ import History from "../ems/History"
 import {Layout, notification} from 'antd';
 import Seamstress from "../ems/Seamstress";
 import Result from "../ems/Result";
+import Quilting from "../ems/Quilting";
 
 const {Content} = Layout;
 
@@ -111,6 +112,9 @@ class App extends Component {
                                                                                       authenticated={this.state.isAuthenticated}/>}>
                             </Route>
                             <Route exact path="/seamstress" render={() => <Seamstress history={this.props.history}
+                                                                                      authenticated={this.state.isAuthenticated}/>}>
+                            </Route>
+                            <Route exact path="/quilting" render={() => <Quilting history={this.props.history}
                                                                                       authenticated={this.state.isAuthenticated}/>}>
                             </Route>
                             <Route component={NotFound}/>

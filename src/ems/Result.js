@@ -32,10 +32,6 @@ class Result extends Component {
             }).catch(error => {
             if (error.status === 401) {
                 this.props.history.push('/login');
-                notification.error({
-                    message: 'EMS',
-                    description: 'Please login first'
-                });
             } else {
                 notification.error({
                     message: 'EMS',
@@ -93,6 +89,7 @@ class Result extends Component {
                 title: 'Result',
                 dataIndex: 'result',
                 key: 'result',
+                sorter: (a, b) => a.result - b.result,
             },
             {
                 title: 'Shift',
@@ -107,7 +104,7 @@ class Result extends Component {
         const dataSource = sorted1.map(r => {
             return {
                 date: r.date,
-                result: Math.round(r.percentageResult),
+                result: r.percentageResult.toFixed(2),
                 shift: r.shift,
                 key: r.id,
             }
