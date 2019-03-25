@@ -22,7 +22,7 @@ class AppHeader extends Component {
             menuItems = [
                 <Menu.Item key="/">
                     <Link to="/">
-                        <span>Summary</span>
+                        <span>Brief</span>
                     </Link>
                 </Menu.Item>,
                 <Menu.Item key="/seamstress">
@@ -52,9 +52,7 @@ class AppHeader extends Component {
         return (
             <Header className="app-header">
                 <div className="container">
-                    <div className="app-title">
-                        <Link to="/">MCK9999 - EMS</Link>
-                    </div>
+
                     <Menu
                         className="app-menu"
                         mode="horizontal"

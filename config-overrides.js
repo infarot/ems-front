@@ -9,6 +9,7 @@ module.exports = override(
         javascriptEnabled: true,
         modifyVars: {
             "@layout-header-background": "#FFFFFF",
+            "@layout-body-background": "#FFFFFF",
             "@layout-footer-background": "#bae7ff"
 
         },
