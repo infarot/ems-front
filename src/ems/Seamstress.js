@@ -217,31 +217,32 @@ class Seamstress extends Component {
         });
         return (
             <div>
-                <br/>
-                <RangePicker
-                    dateRender={(current) => {
-                        const style = {};
-                        if (current.date() === 1) {
-                            style.border = '1px solid #1890ff';
-                            style.borderRadius = '50%';
-                        }
-                        return (
-                            <div className="ant-calendar-date" style={style}>
-                                {current.date()}
-                            </div>
-                        );
-                    }}
-                    onChange={this.onChange}
-                    placeholder={this.state.fromDate.length > 1 ? [this.state.fromDate, this.state.toDate] : ['From', 'To']}
-                />
-                <Button
-                    className="button" type="primary"
-                    onClick={() => this.setState({fromDate: '', toDate: ''}, () => {
-                        this.getSeamstresses();
-                    })}>
-                    Reset
-                </Button>
-                <br/><br/>
+                <h1>
+                    <br/>
+                    <RangePicker
+                        dateRender={(current) => {
+                            const style = {};
+                            if (current.date() === 1) {
+                                style.border = '1px solid #1890ff';
+                                style.borderRadius = '50%';
+                            }
+                            return (
+                                <div className="ant-calendar-date" style={style}>
+                                    {current.date()}
+                                </div>
+                            );
+                        }}
+                        onChange={this.onChange}
+                        placeholder={this.state.fromDate.length > 1 ? [this.state.fromDate, this.state.toDate] : ['From', 'To']}
+                    />
+                    <Button
+                        className="button" type="primary"
+                        onClick={() => this.setState({fromDate: '', toDate: ''}, () => {
+                            this.getSeamstresses();
+                        })}>
+                        Reset
+                    </Button>
+                </h1>
                 <Table bordered pagination={{pageSize: 25}} dataSource={dataSource} columns={columns}/>
             </div>)
     }

@@ -38,6 +38,13 @@ export function getSeamstressList() {
     });
 }
 
+export function getProductionWorkerList() {
+    return request({
+        url: API_BASE_URL + "/productionWorker",
+        method: 'GET'
+    });
+}
+
 export function getSeamstressListFromDateRange(from, to) {
     return request({
         url: API_BASE_URL + "/seamstress/" + from + "/" + to,
@@ -69,6 +76,20 @@ export function getSeamstressResults(id) {
 export function getQuiltingData() {
     return request({
         url: API_BASE_URL + "/quilting",
+        method: 'GET'
+    });
+}
+
+export function getQuiltingStatistics(month, year) {
+    return request({
+        url: API_BASE_URL + "/quilting/statistics/" + month + "/" + year,
+        method: 'GET'
+    });
+}
+
+export function getQuiltingStatisticsByOperator(month, year, id) {
+    return request({
+        url: API_BASE_URL + "/quilting/statistics/" + month + "/" + year + "/" + id,
         method: 'GET'
     });
 }

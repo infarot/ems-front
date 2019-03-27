@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {getMonthStatistics, getShiftProduction} from "../util/APIUtils";
-import {notification, Progress, Table} from "antd";
+import {Card, Col, notification, Progress, Row, Table} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 import "./Home.css"
 import {Link, withRouter} from "react-router-dom";
@@ -197,19 +197,39 @@ class Home extends Component {
 
         return (
             <div>
-                <h2>Month statistics:
+                <h1 className="h1-button">
                     <Link to={{
                         pathname: `/history`,
                     }}>
                         <Button className="history-button" type="primary" size="small">History</Button>
                     </Link>
+                </h1>
+                <h2>Current month statistics</h2>
+                <h2>
+                    <div style={{background: "#FFFFFF"}}>
+                        <Row gutter={16}>
+                            <Col span={8}>
+                                <Card size="small" title="Average per sts:" bordered={true}>
+                                    <span className="card-text"> {Math.round(averagePerAll)} </span></Card>
+                            </Col>
+                            <Col span={8}>
+                                <Card size="small" title="Average result:" bordered={true}>
+                                    <span className="card-text">{Math.round(averageResult)}</span></Card>
+                            </Col>
+                            <Col span={8}>
+                                <Card size="small" title="Average efficiency:"
+                                      bordered={true}> <span> {Math.round(averageWorkOrganization) > 90 ?
+                                    <Progress width={70} strokeColor="#44EF29" type="circle"
+                                              percent={Math.round(averageWorkOrganization)}
+                                              format={percent => `${percent}`}/> :
+                                    <Progress strokeColor="#FFF700" width={70} type="circle"
+                                              percent={Math.round(averageWorkOrganization)}
+                                              format={percent => `${percent}`}/>}</span></Card>
+                            </Col>
+                        </Row>
+                    </div>
                 </h2>
-                <h1>Average per sts: {Math.round(averagePerAll)} | Average result: {Math.round(averageResult)} | Average
-                    efficiency: {Math.round(averageWorkOrganization) > 90 ?
-                        <Progress width={70} strokeColor="#44EF29" type="circle"
-                                  percent={Math.round(averageWorkOrganization)} format={percent => `${percent}`}/> :
-                        <Progress strokeColor="#FFF700" width={70} type="circle"
-                                  percent={Math.round(averageWorkOrganization)} format={percent => `${percent}`}/>}</h1>
+
                 <Table bordered dataSource={dataSource} columns={columns}/>
             </div>
         )

@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import {getQuiltingData} from "../util/APIUtils";
-import {notification, Table} from "antd";
+import {getQuiltingData, getQuiltingStatistics} from "../util/APIUtils";
+import {Card, Col, notification, Row, Table} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import "./Quilting.css"
+import Button from "antd/lib/button";
 
 class Quilting extends Component {
     _isMounted = false;
@@ -12,9 +13,23 @@ class Quilting extends Component {
         super(props);
         this.state = {
             quiltingData: [],
+            quiltingStatistics: [],
+            month: 0,
+            year: 0,
             quiltingLoading: false,
+
         }
     }
+
+    getCurrentMonthAndYear = () => {
+        this.setState({
+                month: new Date().getMonth() + 1,
+                year: new Date().getFullYear()
+            }, () => {
+                this.getQStats();
+            }
+        );
+    };
 
     getQData = () => {
         this.setState({
@@ -40,11 +55,36 @@ class Quilting extends Component {
         });
     };
 
+    getQStats = () => {
+        this.setState({
+            quiltingLoading: true
+        });
+        getQuiltingStatistics(this.state.month, this.state.year)
+            .then(response => {
+                if (this._isMounted) {
+                    this.setState({
+                        quiltingStatistics: response,
+                        quiltingLoading: false
+                    })
+                }
+            }).catch(error => {
+            if (error.status === 401) {
+                this.props.history.push('/login');
+            } else {
+                notification.error({
+                    message: 'EMS',
+                    description: error.message || 'Something went wrong. Please try again'
+                });
+            }
+        });
+    };
+
 
     componentDidMount() {
         this._isMounted = true;
-
+        this.getCurrentMonthAndYear();
         this.getQData();
+
 
     }
 
@@ -54,12 +94,15 @@ class Quilting extends Component {
 
 
     render() {
-        const {quiltingData} = this.state;
+        const {quiltingData, quiltingStatistics} = this.state;
 
 
         if (this.state.quiltingLoading) {
             return <LoadingIndicator/>
         }
+
+        const averageLmt = quiltingStatistics.averageLmt;
+        const averageTotalLoss = quiltingStatistics.averageTotalLoss;
 
 
         const columns = [
@@ -173,6 +216,7 @@ class Quilting extends Component {
             return new Date(b.date) - new Date(a.date)
         });
 
+
         const dataSource = sorted.map(r => {
             return {
                 date: r.date,
@@ -188,11 +232,36 @@ class Quilting extends Component {
                 qIndices: r.quiltedIndices,
                 key: r.id,
             }
+
         });
 
 
         return (
+
             <div>
+                <h2>
+                    <Link to={{
+                        pathname: `/quiltingHistory`,
+                    }}>
+                        <Button className="history-button" type="primary" size="small">More</Button>
+                    </Link>
+                </h2>
+                <h2>Current month statistics
+                </h2>
+                <h2>
+                    <div style={{background: "#FFFFFF"}}>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <Card size="small" title="Average quilted meters:" bordered={true}> <span
+                                    className="quilting-table-qm-column"> {Math.round(averageLmt)} </span></Card>
+                            </Col>
+                            <Col span={12}>
+                                <Card size="small" title="Average loss:" bordered={true}> <span
+                                    className="quilting-table-loss-column">{averageTotalLoss > 0 ? (averageTotalLoss * 100).toFixed(4) : 0.0}%</span></Card>
+                            </Col>
+                        </Row>
+                    </div>
+                </h2>
                 <br/>
                 <Table
                     bordered

@@ -22,8 +22,9 @@ import {Layout, notification} from 'antd';
 import Seamstress from "../ems/Seamstress";
 import Result from "../ems/Result";
 import Quilting from "../ems/Quilting";
+import QuiltingHistory from "../ems/QuiltingHistory";
 
-const {Content} = Layout;
+const {Content, Footer} = Layout;
 
 class App extends Component {
     constructor(props) {
@@ -111,6 +112,9 @@ class App extends Component {
                             <Route exact path="/history" render={() => <History history={this.props.history}
                                                                                       authenticated={this.state.isAuthenticated}/>}>
                             </Route>
+                            <Route exact path="/quiltingHistory" render={() => <QuiltingHistory history={this.props.history}
+                                                                                authenticated={this.state.isAuthenticated}/>}>
+                            </Route>
                             <Route exact path="/seamstress" render={() => <Seamstress history={this.props.history}
                                                                                       authenticated={this.state.isAuthenticated}/>}>
                             </Route>
@@ -121,6 +125,9 @@ class App extends Component {
                         </Switch>
                     </div>
                 </Content>
+                <Footer style={{ textAlign: 'center' }}>
+                    MCK9999 IT ©2019
+                </Footer>
             </Layout>
         );
     }

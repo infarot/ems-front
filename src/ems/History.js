@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {withRouter} from "react-router-dom";
-import {DatePicker, notification, Progress} from 'antd';
+import {Card, Col, DatePicker, notification, Progress, Row} from 'antd';
 import {getMonthStatistics} from "../util/APIUtils";
 import "./History.css"
 
@@ -29,7 +29,6 @@ class History extends Component {
 
     onChange = (date, dateString) => {
         this.setState({month: date.month() + 1, year: date.year()}, () => {
-            console.log(this.state.month, this.state.year);
             this.getStat();
         });
 
@@ -74,16 +73,30 @@ class History extends Component {
                 </div>
                 {averagePerAll > 0 ?
                     <div>
-                        <h1>Average per sts: {Math.round(averagePerAll)} | Average result: {Math.round(averageResult)} |
-                            Average
-                            efficiency: {Math.round(averageWorkOrganization) > 90 ?
-                                <Progress width={70} strokeColor="#44EF29" type="circle"
-                                          percent={Math.round(averageWorkOrganization)}
-                                          format={percent => `${percent}`}/> :
-                                <Progress strokeColor="#FFF700" width={70} type="circle"
-                                          percent={Math.round(averageWorkOrganization)}
-                                          format={percent => `${percent}`}/>}
-                        </h1>
+                        <h2>
+                            <div style={{background: "#FFFFFF"}}>
+                                <Row gutter={16}>
+                                    <Col span={8}>
+                                        <Card size="small" title="Average per sts:" bordered={true}>
+                                            <span className="card-text"> {Math.round(averagePerAll)} </span></Card>
+                                    </Col>
+                                    <Col span={8}>
+                                        <Card size="small" title="Average result:" bordered={true}>
+                                            <span className="card-text">{Math.round(averageResult)}</span></Card>
+                                    </Col>
+                                    <Col span={8}>
+                                        <Card size="small" title="Average efficiency:"
+                                              bordered={true}> <span> {Math.round(averageWorkOrganization) > 90 ?
+                                            <Progress width={70} strokeColor="#44EF29" type="circle"
+                                                      percent={Math.round(averageWorkOrganization)}
+                                                      format={percent => `${percent}`}/> :
+                                            <Progress strokeColor="#FFF700" width={70} type="circle"
+                                                      percent={Math.round(averageWorkOrganization)}
+                                                      format={percent => `${percent}`}/>}</span></Card>
+                                    </Col>
+                                </Row>
+                            </div>
+                        </h2>
                     </div>
                     : null
                 }

@@ -10,7 +10,7 @@ module.exports = override(
         modifyVars: {
             "@layout-header-background": "#FFFFFF",
             "@layout-body-background": "#FFFFFF",
-            "@layout-footer-background": "#bae7ff"
+            "@layout-footer-background": "#FFFFFF"
 
         },
     }),
