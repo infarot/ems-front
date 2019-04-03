@@ -213,7 +213,7 @@ class Quilting extends Component {
         ];
 
         let sorted = quiltingData.sort((a, b) => {
-            return new Date(b.date) - new Date(a.date)
+            return new Date(b.id) - new Date(a.id)
         });
 
 
