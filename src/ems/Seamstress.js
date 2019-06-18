@@ -205,7 +205,7 @@ class Seamstress extends Component {
                 name: seamstress.name,
                 lastName: seamstress.lastName,
                 id: seamstress.id,
-                average: seamstress.average,
+                average: seamstress.average.toFixed(2),
                 score: seamstress.score,
                 key: seamstress.id,
                 action: <Link to={{
