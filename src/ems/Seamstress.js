@@ -242,6 +242,13 @@ class Seamstress extends Component {
                         })}>
                         Reset
                     </Button>
+
+                    <Link to={{
+                        pathname: `/seamstressAdd`,
+                    }}>
+                        <Button className="button" type="primary">Add new</Button>
+                    </Link>
+
                 </h1>
                 <Table bordered pagination={{pageSize: 100}} dataSource={dataSource} columns={columns}/>
             </div>)

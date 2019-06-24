@@ -23,6 +23,7 @@ import Seamstress from "../ems/Seamstress";
 import Result from "../ems/Result";
 import Quilting from "../ems/Quilting";
 import QuiltingHistory from "../ems/QuiltingHistory";
+import SeamstressAdd from "../ems/SeamstressAdd";
 
 const {Content, Footer} = Layout;
 
@@ -120,6 +121,9 @@ class App extends Component {
                             </Route>
                             <Route exact path="/quilting" render={() => <Quilting history={this.props.history}
                                                                                       authenticated={this.state.isAuthenticated}/>}>
+                            </Route>
+                            <Route exact path="/seamstressAdd" render={() => <SeamstressAdd history={this.props.history}
+                                                                                  authenticated={this.state.isAuthenticated}/>}>
                             </Route>
                             <Route component={NotFound}/>
                         </Switch>

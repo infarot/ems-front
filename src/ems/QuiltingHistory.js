@@ -47,7 +47,7 @@ class QuiltingHistory extends Component {
 
     getPW = () => {
         this.setState({
-            historyLoading: true
+            isLoading: true
         });
 
         getProductionWorkerList()
@@ -55,7 +55,7 @@ class QuiltingHistory extends Component {
                 if (this._isMounted) {
                     this.setState({
                         productionWorker: response,
-                        historyLoading: false
+                        isLoading: false
                     })
                 }
             }).catch(error => {
@@ -73,7 +73,7 @@ class QuiltingHistory extends Component {
 
     getStat = () => {
         this.setState({
-            historyLoading: true
+            isLoading: true
         });
 
         getQuiltingStatisticsByOperator(this.state.month, this.state.year, this.state.operatorId)
@@ -81,7 +81,7 @@ class QuiltingHistory extends Component {
                 if (this._isMounted) {
                     this.setState({
                         monthStats: response,
-                        historyLoading: false
+                        isLoading: false
                     })
                 }
             }).catch(error => {

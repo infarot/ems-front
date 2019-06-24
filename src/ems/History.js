@@ -36,7 +36,7 @@ class History extends Component {
 
     getStat = () => {
         this.setState({
-            historyLoading: true
+            isLoading: true
         });
 
         getMonthStatistics(this.state.month, this.state.year)
@@ -44,7 +44,7 @@ class History extends Component {
                 if (this._isMounted) {
                     this.setState({
                         monthStats: response,
-                        historyLoading: false
+                        isLoading: false
                     })
                 }
             }).catch(error => {

@@ -102,6 +102,14 @@ export function signup(signupRequest) {
     });
 }
 
+export function addNewSeamstress(seamstress) {
+    return request({
+        url: API_BASE_URL + "/seamstress",
+        method: 'POST',
+        body: JSON.stringify(seamstress)
+    });
+}
+
 export function getCurrentUser() {
     if (!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
